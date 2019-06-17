@@ -17,7 +17,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE, echo=F}
-##setwd('')
+## setwd('')
 library(TwoSampleMR)
 library(tidyverse)
 source('scripts/PowerFunctions.R')
@@ -29,7 +29,7 @@ tnfqtl <- 'input/tnf_qtls.txt' %>%
   read_table2()
 
 ## load
-load <- 'data/Kunkle2019load_stage123.chrall.CPRA_b37.tsv.gz' %>% 
+load <- 'data/Kunkle2019load.chrall.CPRA_b37.tsv.gz' %>% 
   read_table2(., comment = '##', col_types = 'cddccdcddddddddccccccc')  %>%
   select(ID, CHROM, POS, REF, ALT, AF, TRAIT, BETA, SE, Z, P, N, DBSNP_ID, OLD_ID)
 
@@ -39,12 +39,12 @@ artis <- 'data/Okada2014rartis.chrall.CPRA_b37.tsv.gz' %>%
   select(ID, CHROM, POS, REF, ALT, AF, TRAIT, BETA, SE, Z, P, N, DBSNP_ID, OLD_ID)
 
 ## RA - LOAD
-ra_load.mrdat <- read_csv('/Users/sheaandrews/Dropbox/Research/PostDoc-MSSM/0_other/5_Documents/Kunkle2019load/Okada2014rartis/Kunkle2019load/Okada2014rartis_5e-8_Kunkle2019load_MRdat.csv') %>% 
+ra_load.mrdat <- read_csv('input/Okada2014rartis_5e-8_Kunkle2019load_MRdat.csv') %>% 
   select(-pt)  %>% 
   mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure))
 
 ## TNFa - LOAD
-tnfa_load.mrdat <- read_csv('/Users/sheaandrews/Dropbox/Research/PostDoc-MSSM/0_other/5_Documents/Kunkle2019load/AholaOlli2018tnfa/Kunkle2019load/AholaOlli2018tnfa_5e-6_Kunkle2019load_MRdat.csv') %>% 
+tnfa_load.mrdat <- read_csv('input/AholaOlli2018tnfa_5e-6_Kunkle2019load_MRdat.csv') %>% 
   select(-pt)  %>% 
   mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure))
 
@@ -399,7 +399,7 @@ tnfceqtl_load.out %>%
   bind_rows(ra_load.out) %>% 
   mutate(exposure = str_replace(exposure, 'Okada2014rartis', 'RA')) %>% 
   mutate(exposure = str_replace(exposure, 'AholaOlli2018tnfa', 'TNFa')) %>%
-  write_csv('/Users/sheaandrews/Dropbox/Research/PostDoc-MSSM/0_other/4_Output/table1.csv')
+  write_csv('output/table1.csv')
 ```
 
 
@@ -411,7 +411,7 @@ tnfceqtl_load.mrdat %>%
   mutate(exposure = str_replace(exposure, 'Okada2014rartis', 'RA')) %>% 
   mutate(exposure = str_replace(exposure, 'AholaOlli2018tnfa', 'TNFa')) %>%
   mutate(outcome = 'LOAD') %>%
-  write_csv('/Users/sheaandrews/Dropbox/Research/PostDoc-MSSM/0_other/4_Output/ST1.csv')
+  write_csv('output/ST1.csv')
 
 
 ```
