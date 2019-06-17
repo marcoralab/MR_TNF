@@ -1,5 +1,5 @@
 ---
-title: "TNF-AD MR"
+title: "TNF - AD Mendelian Randomization"
 author: "Shea Andrews"
 date: "6/6/2019"
 output:
@@ -73,7 +73,7 @@ tnfa_load.mrdat <- read_csv('input/AholaOlli2018tnfa_5e-6_Kunkle2019load_MRdat.c
   + "It probably was high risk, very costly, very long term drug development that was off-strategy"
   + "I think the financial case is they won’t be making any money off of it"
 
-![Google News](Screenshot.png)
+![Google News](docs/Screenshot.png)
 
 ## Other Articles 
 [A Missed Alzheimer’s Opportunity? Not So Much](https://blogs.sciencemag.org/pipeline/archives/2019/06/06/a-missed-alzheimers-opportunity-not-so-much)
@@ -364,7 +364,6 @@ tnfa_load.het %>%
 ## Results
 
 Table 1
-
 ```{r, echo=FALSE, message=F, warning = FALSE}
 
 tnfceqtl_load.out <- generate_odds_ratios(tnfceqtl_load.res) %>% 
