@@ -1,0 +1,430 @@
+---
+title: "TNF-AD MR"
+author: "Shea Andrews"
+date: "6/6/2019"
+output:
+  html_document:
+    df_print: paged
+    keep_md: false
+    toc: true
+    number_sections: false
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, echo=F}
+##setwd('')
+library(TwoSampleMR)
+library(tidyverse)
+source('scripts/PowerFunctions.R')
+```
+
+```{r, read data, include=TRUE, cache=T, echo=F, message=F, warning = FALSE}
+
+tnfqtl <- 'input/tnf_qtls.txt' %>% 
+  read_table2()
+
+## load
+load <- 'data/Kunkle2019load_stage123.chrall.CPRA_b37.tsv.gz' %>% 
+  read_table2(., comment = '##', col_types = 'cddccdcddddddddccccccc')  %>%
+  select(ID, CHROM, POS, REF, ALT, AF, TRAIT, BETA, SE, Z, P, N, DBSNP_ID, OLD_ID)
+
+## RA
+artis <- 'data/Okada2014rartis.chrall.CPRA_b37.tsv.gz' %>% 
+  read_table2(., comment = '##', col_types = 'cddccdcddddddddccccccc')  %>%
+  select(ID, CHROM, POS, REF, ALT, AF, TRAIT, BETA, SE, Z, P, N, DBSNP_ID, OLD_ID)
+
+## RA - LOAD
+ra_load.mrdat <- read_csv('/Users/sheaandrews/Dropbox/Research/PostDoc-MSSM/0_other/5_Documents/Kunkle2019load/Okada2014rartis/Kunkle2019load/Okada2014rartis_5e-8_Kunkle2019load_MRdat.csv') %>% 
+  select(-pt)  %>% 
+  mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure))
+
+## TNFa - LOAD
+tnfa_load.mrdat <- read_csv('/Users/sheaandrews/Dropbox/Research/PostDoc-MSSM/0_other/5_Documents/Kunkle2019load/AholaOlli2018tnfa/Kunkle2019load/AholaOlli2018tnfa_5e-6_Kunkle2019load_MRdat.csv') %>% 
+  select(-pt)  %>% 
+  mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure))
+
+```
+
+# Washington Post
+[Pfizer had clues its blockbuster drug could prevent Alzheimer’s. Why didn’t it tell the world?](https://www.washingtonpost.com/business/economy/pfizer-had-clues-its-blockbuster-drug-could-prevent-alzheimers-why-didnt-it-tell-the-world/2019/06/04/9092e08a-7a61-11e9-8bb7-0fc796cf2ec0_story.html?utm_term=.7510d73a829d)
+
+* Pfizer's rheumatoid arthritis anti-inflammatory drug, Enbrel ([Etanercept](https://en.wikipedia.org/wiki/Etanercept)), appeared to reduce the risk of Alzheimer’s disease by 64 percent
+* Based on analysis of hundreds of thousands of insurance claims
+  + They divided those anonymous patients into two equal groups of 127,000 each, one of patients with an Alzheimer’s diagnosis and one of patients without. 
+  + Then they checked for Enbrel treatment. 
+  + There were more people, 302, treated with Enbrel in the group without Alzheimer’s diagnosis. 
+  + In the group with Alzheimer’s, 110 had been treated with Enbrel.
+  + mirrored in the same proportion when the researchers checked insurance claims information from another database. 
+  + similar numbers for Humira, a drug marketed by AbbVie that works like Enbrel. 
+  + The positive results also showed up when checked for memory loss and mild cognitive impairment
+* Researchers in the company’s division of inflammation and immunology urged Pfizer to conduct a clinical trial. Estimated to cost **$80 million**
+  + take four years
+  + involve 3,000 to 4,000 patients, 
+* After three years of internal reviews, Pfizer determined that Enbrel did not show promise for Alzheimer’s prevention because the drug does not directly reach brain tissue
+* Opted against publication of its data because of its doubts about the results
+* The broader market forces that critics say discouraged Pfizer from investing in Alzheimer’s clinical trials are rooted in Enbrel’s "life cycle" 
+  + Enbrel has reached the end of its patent life. 
+  + Profits are dwindling as generic competition emerges, diminishing financial incentives for further research into drug repurposing
+  + "It probably was high risk, very costly, very long term drug development that was off-strategy"
+  + "I think the financial case is they won’t be making any money off of it"
+
+![Google News](Screenshot.png)
+
+## Other Articles 
+[A Missed Alzheimer’s Opportunity? Not So Much](https://blogs.sciencemag.org/pipeline/archives/2019/06/06/a-missed-alzheimers-opportunity-not-so-much)
+
+* Critique of the press resulting from the Washington Posts story
+
+[A drug may prevent Alzheimer’s but there are no plans to find out](https://www.newscientist.com/article/2206297-a-drug-may-prevent-alzheimers-but-there-are-no-plans-to-find-out/). New Scientist 
+
+[Etanercept in Alzheimer disease. A randomized, placebo-controlled, double-blind, phase 2 trial](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4451045/)
+Butchart et al Neurology. 2015 May 26;84(21):2161-8. 
+
+* Secondary outcomes were differences in the change from baseline of the psychometric measures (sMMSE, ADAS-cog, BADLS, CGI-I, Cornell, and NPI) at 12 weeks and 24 weeks between intervention groups for observed cases and intention to treat–last observation carried forward (ITT-LOCF)
+* None of the clinical outcomes were statistically significant between 
+
+
+[Treatment for Rheumatoid Arthritis and Risk of Alzheimer’s Disease: A Nested Case-Control Analysis](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5585782/)
+CNS Drugs. 2016 Nov;30(11):1111-1120
+
+* We performed a nested case-control study of more than 8.5 million commercially insured adults
+* There is an increased risk of AD in the studied RA population. The relative risk of AD among RA subjects was lowered in those exposed to etanercept. Anti-TNF therapy with etanercept shows promise as a potential treatment for AD.
+
+
+# Etanercept
+
+* a biopharmaceutical that treats autoimmune diseases by interfering with tumor necrosis factor (TNF, a soluble inflammatory cytokine) by acting as a TNF inhibitor
+* Tumor necrosis factor-alpha (TNFα) is a cytokine produced by lymphocytes and macrophages, two types of white blood cells. It mediates the immune response by attracting additional white blood cells to sites of inflammation and through additional molecular mechanisms that initiate and amplify inflammation. 
+
+On Wikipedia: 
+*"It has been reported by the Washington Post that etanercept could be active in preventing Alzheimer's disease, based on data from health insurance."*
+
+
+# TNF QTL's
+## eQTLGen
+
+Significant cis-eQTLs (FDR < 0.05) for TNF in whole blood from eQTLGen
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfqtl %>% 
+  filter(TRAIT == 'TNF' & QTL == 'cis_eQTL') %>% 
+  as_data_frame()
+```
+
+## TNFa proteomic QTLs
+
+Genome-wide Association Study Identifies 27 Loci Influencing Concentrations of Circulating Cytokines and Growth Factors. 
+[Ahola-Olli et al. Am J Hum Genet. 2017 Jan 5;100(1):40-50](https://www.ncbi.nlm.nih.gov/pubmed/27989323)
+* No genomwide-significant pQTLs for TNFa. 6 nominally significant independent loci
+
+
+Genome-wide association study identifies seven novel loci associating with 2 circulating cytokines and cell adhesion molecules in Finns. [Silz et al. BioRxiv 2018](https://www.biorxiv.org/content/10.1101/491852v1). 
+* Conducted a meta-analyssi with the data from Ahola-Olli et al 2017. One SNP was significantly associated with TNFa.
+
+```{r, echo=FALSE, message=F, warning = FALSE}
+# https://www.bmj.com/content/343/bmj.d2090
+tnfapqtl <- tibble(trait = 'TNFa', 
+       locus = '13q14.3', 
+       chr = 13,
+       pos = 51141997,
+       gene = 'DLEU1', 
+       snp = 'rs17074575',
+       EA = 'G',
+       OA = 'C',
+       EAF = 0.002,
+       b = 2.131, 
+       p = 2.71e-09, 
+      n = 13577) %>% 
+  mutate(z = -0.862 + sqrt(0.743 - 2.404 * log(p))) %>% 
+  mutate(se = b/z) %>% 
+  mutate(pve = snp.pve(EAF, b, se, n))
+
+```
+
+# MR analysis 
+[Mendelian Randomization Studies Promise to Shorten the Journey to FDA Approval](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6234613/)
+
+[Mendelian randomization: a novel approach for the prediction of adverse drug events and drug repurposing opportunities](https://doi.org/10.1093/ije/dyx207)
+
+[Repurposing antihypertensive drugs for the prevention of Alzheimer’s disease: a Mendelian Randomization study](https://www.biorxiv.org/content/10.1101/486878v1)
+
+```{r, echo=F}
+samplesize <- tibble(trait = c('AD', 'AAOS', 'RA'), 
+                     samplesize = c(63926, 40255, 58284), 
+                     ncase = c(21982, 14406, 14361), 
+                     ncontrol = c(41944, 25849, 43923), 
+                     prop = ncase / samplesize)
+```
+
+
+## TNF cis-eQTL
+
+Formating and clumping exposure
+```{r, echo=FALSE, message=F, warning = FALSE}
+## TNF cis-eqtl
+tnfceqtl_exposure.dat <- tnfqtl %>% 
+  filter(TRAIT == 'TNF' & QTL == 'cis_eQTL') %>% 
+  #filter(P < 5e-8) %>% 
+  mutate(AF = ifelse(DBSNP_ID == 'rs9469017', 1-AF, AF)) %>%
+  format_data(., type = 'exposure',
+                               snp_col = 'DBSNP_ID',
+                               beta_col = "BETA",
+                               se_col = "SE",
+                               eaf_col = "AF",
+                               effect_allele_col = "ALT",
+                               other_allele_col = "REF",
+                               pval_col = "P",
+                               z_col = "Z",
+                               samplesize_col = "N",
+                               phenotype_col = 'TRAIT')
+
+tnfceqtl_exposure.clmpdat <- clump_data(tnfceqtl_exposure.dat)
+
+tnfqtl %>%
+  select(DBSNP_ID, CHROM, POS) %>%
+  right_join(tnfceqtl_exposure.clmpdat, by = c('DBSNP_ID' = 'SNP')) %>% 
+  rename(SNP = DBSNP_ID) %>%
+  select(SNP, CHROM, POS, other_allele.exposure, effect_allele.exposure, eaf.exposure, beta.exposure, se.exposure, z.exposure, pval.exposure, samplesize.exposure, exposure, mr_keep.exposure) %>%
+  as_data_frame()
+```
+
+### LOAD 
+
+Extract exposure SNPs from LOAD GWAS and harmonize exposure and outcome datasets
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_load.dat <- load %>% 
+  semi_join(tnfceqtl_exposure.clmpdat, by = c('DBSNP_ID' = 'SNP')) %>%
+  format_data(., type = 'outcome',
+                              snp_col = 'DBSNP_ID',
+                              beta_col = "BETA",
+                              se_col = "SE",
+                              eaf_col = "AF",
+                              effect_allele_col = "ALT",
+                              other_allele_col = "REF",
+                              pval_col = "P",
+                              z_col = "Z",
+                              samplesize_col = "N",
+                              phenotype_col = 'TRAIT')
+
+tnfceqtl_load.mrdat <- harmonise_data(tnfceqtl_load.dat, tnfceqtl_exposure.clmpdat) %>% 
+  mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure))  
+
+tnfceqtl_load.mrdat %>% 
+  as_data_frame()
+```
+
+Power analysis 
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_load.pve <- tnfceqtl_load.mrdat %>% 
+  mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure)) %>% 
+  summarise(pve.exposure = sum(pve.exposure), samplesize.exposure = max(samplesize.exposure), samplesize.outcome = max(samplesize.outcome), nsnps = n()) 
+
+tnfceqtl_load.power <- with(tnfceqtl_load.pve, results_binary(samplesize.exposure, samplesize.outcome, nsnps, 0.05, pve.exposure, 0.34, 1.1)) 
+
+tnfceqtl_load.power %>% as_data_frame()
+```
+
+MR analysis 
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_load.res <- mr_singlesnp(tnfceqtl_load.mrdat, all_method = c("mr_ivw_fe", "mr_weighted_median", "mr_egger_regression")) 
+
+tnfceqtl_load.res %>% 
+  select(exposure, outcome, SNP, b, se, p) %>% 
+  as_data_frame() 
+
+```
+
+Heterogenity Tests
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_load.het <- mr_heterogeneity(tnfceqtl_load.mrdat, method_list=c("mr_egger_regression", "mr_ivw")) 
+
+tnfceqtl_load.het %>% 
+  select(exposure, outcome, method, Q, Q_df, Q_pval, Q_pval) %>% 
+  as_data_frame() 
+```
+
+### Rheumatoid Arthritis 
+
+Extract exposure SNPs from RA GWAS and harmonize exposure and outcome datasets
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_artis.dat <- artis %>% 
+  semi_join(tnfceqtl_exposure.clmpdat, by = c('DBSNP_ID' = 'SNP')) %>%
+  format_data(., type = 'outcome',
+                              snp_col = 'DBSNP_ID',
+                              beta_col = "BETA",
+                              se_col = "SE",
+                              eaf_col = "AF",
+                              effect_allele_col = "ALT",
+                              other_allele_col = "REF",
+                              pval_col = "P",
+                              z_col = "Z",
+                              samplesize_col = "N",
+                              phenotype_col = 'TRAIT')
+
+tnfceqtl_artis.mrdat <- harmonise_data(tnfceqtl_artis.dat, tnfceqtl_exposure.clmpdat) %>% 
+  mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure))  
+
+tnfceqtl_artis.mrdat %>% 
+  as_data_frame()
+```
+
+Power analysis 
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_artis.power <- tnfceqtl_artis.mrdat %>% 
+  mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure)) %>% 
+  summarise(pve.exposure = sum(pve.exposure), samplesize.exposure = max(samplesize.exposure), samplesize.outcome = max(samplesize.outcome), nsnps = n()) 
+
+with(tnfceqtl_artis.power, results_binary(samplesize.exposure, samplesize.outcome, nsnps, 0.05, pve.exposure, 0.24, 1.12)) %>% as_data_frame()
+```
+
+MR analysis 
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_artis.res <- mr_singlesnp(tnfceqtl_artis.mrdat, all_method = c("mr_ivw_fe", "mr_weighted_median", "mr_weighted_mode","mr_egger_regression")) 
+
+tnfceqtl_artis.res %>% 
+  select(exposure, outcome, SNP, b, se, p) %>% 
+  as_data_frame() 
+```
+
+Heterogenity Tests
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_artis.het <- mr_heterogeneity(tnfceqtl_artis.mrdat, method_list=c("mr_egger_regression", "mr_ivw")) 
+
+tnfceqtl_artis.het %>% 
+  select(exposure, outcome, method, Q, Q_df, Q_pval, Q_pval) %>% 
+  as_data_frame() 
+```
+
+## Rheumatoid Arthritis 
+
+### LOAD
+Power analysis 
+```{r, echo=FALSE, message=F, warning = FALSE}
+ra_load.power <- ra_load.mrdat %>% 
+  mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure)) %>% 
+  summarise(pve.exposure = sum(pve.exposure), samplesize.exposure = max(samplesize.exposure), samplesize.outcome = max(samplesize.outcome), nsnps = n()) 
+
+with(ra_load.power, results_binary(samplesize.exposure, samplesize.outcome, nsnps, 0.05, pve.exposure, 0.34, 1.055)) %>% as_data_frame()
+```
+
+MR analysis 
+```{r, echo=FALSE, message=F, warning = FALSE}
+ra_load.res <- mr(ra_load.mrdat, method_list = c("mr_ivw_fe", "mr_weighted_median", "mr_egger_regression")) 
+ra_load.single <- mr_singlesnp(ra_load.mrdat, all_method = c("mr_ivw_fe", "mr_weighted_median", "mr_egger_regression")) 
+
+ra_load.res %>% 
+  select(exposure, outcome, method, nsnp, b, se, pval) %>% 
+  as_data_frame() 
+```
+
+Heterogenity Tests
+```{r, echo=FALSE, message=F, warning = FALSE}
+ra_load.het <- mr_heterogeneity(ra_load.mrdat, method_list=c("mr_egger_regression", "mr_ivw")) 
+
+ra_load.het %>% 
+  select(exposure, outcome, method, Q, Q_df, Q_pval, Q_pval) %>% 
+  as_data_frame() 
+```
+
+## TNF-a 
+
+### LOAD
+Power analysis 
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfa_load.power <- tnfa_load.mrdat %>% 
+  mutate(pve.exposure = snp.pve(eaf.exposure, beta.exposure, se.exposure, samplesize.exposure)) %>% 
+  summarise(pve.exposure = sum(pve.exposure), samplesize.exposure = max(samplesize.exposure), samplesize.outcome = max(samplesize.outcome), nsnps = n()) 
+
+with(tnfa_load.power, results_binary(samplesize.exposure, samplesize.outcome, nsnps, 0.05, pve.exposure, 0.34, 1.191)) %>% as_data_frame()
+```
+
+MR analysis 
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfa_load.res <- mr(tnfa_load.mrdat, method_list = c("mr_ivw_fe", "mr_weighted_median", "mr_egger_regression")) 
+tnfa_load.single <- mr_singlesnp(tnfa_load.mrdat, all_method = c("mr_ivw_fe", "mr_weighted_median", "mr_egger_regression")) 
+
+tnfa_load.res %>% 
+  select(exposure, outcome, method, nsnp, b, se, pval) %>% 
+  as_data_frame() 
+```
+
+Heterogenity Tests
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfa_load.het <- mr_heterogeneity(tnfa_load.mrdat, method_list=c("mr_egger_regression", "mr_ivw")) 
+
+tnfa_load.het %>% 
+  select(exposure, outcome, method, Q, Q_df, Q_pval, Q_pval) %>% 
+  as_data_frame() 
+```
+
+## Results
+
+Table 1
+
+```{r, echo=FALSE, message=F, warning = FALSE}
+
+tnfceqtl_load.out <- generate_odds_ratios(tnfceqtl_load.res) %>% 
+  mutate_at(c('b', 'se', 'p',  'lo_ci', 'up_ci', 'or', 'or_lci95', 'or_uci95'), round, 2) %>% 
+  mutate(b_out = paste0(b, ' (', se, ')'), or_out = paste0(or, ' (', or_lci95, ', ', or_uci95, ')')) %>% 
+  select(exposure, SNP, b_out, or_out, p) %>% 
+  as_tibble() %>% 
+  mutate(SNP = str_replace(SNP, 'All - Inverse variance weighted \\(fixed effects\\)', 'IVW')) %>% 
+  mutate(SNP = str_replace(SNP, 'All - Weighted median', 'WME')) %>% 
+  mutate(SNP = str_replace(SNP, 'All - MR Egger', 'MR Egger')) %>% 
+  rename(method = SNP, pval = p)
+
+tnfa_load.out <- generate_odds_ratios(tnfa_load.res) %>% 
+  mutate_at(c('b', 'se', 'pval',  'lo_ci', 'up_ci', 'or', 'or_lci95', 'or_uci95'), round, 2) %>% 
+  mutate(b_out = paste0(b, ' (', se, ')'), or_out = paste0(or, ' (', or_lci95, ', ', or_uci95, ')')) %>% 
+  select(exposure, method, b_out, or_out, pval)  %>% 
+  mutate(method = str_replace(method, 'Inverse variance weighted \\(fixed effects\\)', 'IVW')) %>% 
+  mutate(method = str_replace(method, 'Weighted median', 'WME')) %>% 
+  as_tibble()
+
+ra_load.out <- generate_odds_ratios(ra_load.res) %>% 
+  mutate_at(c('b', 'se', 'pval',  'lo_ci', 'up_ci', 'or', 'or_lci95', 'or_uci95'), round, 2) %>% 
+  mutate(b_out = paste0(b, ' (', se, ')'), or_out = paste0(or, ' (', or_lci95, ', ', or_uci95, ')')) %>% 
+  select(exposure, method, b_out, or_out, pval)  %>% 
+  mutate(method = str_replace(method, 'Inverse variance weighted \\(fixed effects\\)', 'IVW')) %>% 
+  mutate(method = str_replace(method, 'Weighted median', 'WME')) %>% 
+  as_tibble()
+
+
+tnfceqtl_load.out %>% 
+  bind_rows(tnfa_load.out) %>% 
+  bind_rows(ra_load.out) %>% 
+  mutate(exposure = str_replace(exposure, 'Okada2014rartis', 'RA')) %>% 
+  mutate(exposure = str_replace(exposure, 'AholaOlli2018tnfa', 'TNFa')) %>%
+  write_csv('/Users/sheaandrews/Dropbox/Research/PostDoc-MSSM/0_other/4_Output/table1.csv')
+```
+
+
+Supplementary Table 1
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_load.mrdat %>% 
+  bind_rows(tnfa_load.mrdat) %>% 
+  bind_rows(ra_load.mrdat) %>% 
+  mutate(exposure = str_replace(exposure, 'Okada2014rartis', 'RA')) %>% 
+  mutate(exposure = str_replace(exposure, 'AholaOlli2018tnfa', 'TNFa')) %>%
+  mutate(outcome = 'LOAD') %>%
+  write_csv('/Users/sheaandrews/Dropbox/Research/PostDoc-MSSM/0_other/4_Output/ST1.csv')
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
