@@ -27,15 +27,17 @@ URL: http://www.eqtlgen.org/index.html <br>
 Paper: Võsa U, et al. Unraveling the polygenic architecture of complex traits using blood eQTL metaanalysis. [bioRxiv 2018:447367](https://www.biorxiv.org/content/early/2018/10/19/447367).
 
 **TNF-a pQTLs**
-Ahola-Olli AV, Würtz P, Havulinna AS, Aalto K, Pitkänen N, Lehtimäki T, et al. *Genome-wide Association Study Identifies 27 Loci Influencing Concentrations of Circulating Cytokines and Growth Factors*. [Am J Hum Genet 2017;100:40–50](https://doi.org/10.1016/j.ajhg.2016.11.007).
+pQTLs for TNF-a levels in serum from a Genome-wide assocation study of cytokine levels.
+URL: http://computationalmedicine.fi/data#Cytokine_GWAS <br>
+Paper: Ahola-Olli AV, Würtz P, Havulinna AS, Aalto K, Pitkänen N, Lehtimäki T, et al. *Genome-wide Association Study Identifies 27 Loci Influencing Concentrations of Circulating Cytokines and Growth Factors*. [Am J Hum Genet 2017;100:40–50](https://doi.org/10.1016/j.ajhg.2016.11.007).
 
 
 **Rheumatoid Arthritis**
 Genome-wide assocation study statisitcs for rheumatoid arthritis risk <br>
-URL: <br>
+URL: https://grasp.nhlbi.nih.gov/FullResults.aspx <br>
 Paper: Okada Y, Wu D, Trynka G, Raj T, Terao C, Ikari K, et al. *Genetics of rheumatoid arthritis contributes to biology and drug discovery*. [Nature 2014;506:376–81](https://doi.org/10.1038/nature12873)
 
 **Late Onset Alzheimer's Disease**
 Genome-wide assocation study statisitcs for Alzheimer's Disease risk <br>
-URL: <br>
+URL: https://www.niagads.org/datasets/ng00075 <br>
 Paper: Kunkle BW, et al. *Genetic meta-analysis of diagnosed Alzheimer’s disease identifies new risk loci and implicates Aβ, tau, immunity and lipid processing*. [Nat Genet 2019](https://doi.org/10.1038/s41588-019-0358-2).
