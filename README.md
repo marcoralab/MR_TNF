@@ -27,6 +27,8 @@ URL: http://www.eqtlgen.org/index.html <br>
 Paper: Võsa U, et al. Unraveling the polygenic architecture of complex traits using blood eQTL metaanalysis. [bioRxiv 2018:447367](https://www.biorxiv.org/content/early/2018/10/19/447367).
 
 **TNF-α pQTLs** <br>
+Genome-wide association study for TNF-α serum levels
+URL: made avaliable upon request
 Sliz, E., et al. *Genome-wide association study identifies seven novel loci associating with circulating cytokines and cell adhesion molecules in Finns*. [J. Med. Genet 2019](https://doi.org/10.1136/jmedgenet-2018-105965)
 
 **Rheumatoid Arthritis** <br>
