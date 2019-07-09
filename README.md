@@ -29,7 +29,7 @@ Paper: Võsa U, et al. Unraveling the polygenic architecture of complex traits u
 **TNF-α pQTLs** <br>
 Genome-wide association study for TNF-α serum levels
 URL: made avaliable upon request
-Sliz, E., et al. *Genome-wide association study identifies seven novel loci associating with circulating cytokines and cell adhesion molecules in Finns*. [J. Med. Genet 2019](https://doi.org/10.1136/jmedgenet-2018-105965)
+Paper: Sliz, E., et al. *Genome-wide association study identifies seven novel loci associating with circulating cytokines and cell adhesion molecules in Finns*. [J. Med. Genet 2019](https://doi.org/10.1136/jmedgenet-2018-105965)
 
 **Rheumatoid Arthritis** <br>
 Genome-wide assocation study statisitcs for rheumatoid arthritis risk <br>
