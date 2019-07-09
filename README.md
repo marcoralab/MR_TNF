@@ -27,10 +27,7 @@ URL: http://www.eqtlgen.org/index.html <br>
 Paper: Võsa U, et al. Unraveling the polygenic architecture of complex traits using blood eQTL metaanalysis. [bioRxiv 2018:447367](https://www.biorxiv.org/content/early/2018/10/19/447367).
 
 **TNF-α pQTLs** <br>
-pQTLs for TNF-α levels in serum from a Genome-wide assocation study of cytokine levels. <br>
-URL: http://computationalmedicine.fi/data#Cytokine_GWAS <br>
-Paper: Ahola-Olli AV, Würtz P, Havulinna AS, Aalto K, Pitkänen N, Lehtimäki T, et al. *Genome-wide Association Study Identifies 27 Loci Influencing Concentrations of Circulating Cytokines and Growth Factors*. [Am J Hum Genet 2017;100:40–50](https://doi.org/10.1016/j.ajhg.2016.11.007).
-
+Sliz, E., et al. *Genome-wide association study identifies seven novel loci associating with circulating cytokines and cell adhesion molecules in Finns*. [J. Med. Genet 2019](https://doi.org/10.1136/jmedgenet-2018-105965)
 
 **Rheumatoid Arthritis** <br>
 Genome-wide assocation study statisitcs for rheumatoid arthritis risk <br>
