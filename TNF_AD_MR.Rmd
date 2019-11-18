@@ -180,6 +180,8 @@ tnfceqtl_load.power %>% as_data_frame()
 
 MR analysis 
 ```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_load.mrres <- mr(tnfceqtl_load.mrdat, method_list = c("mr_ivw_fe", "mr_weighted_median", "mr_egger_regression")) 
+
 tnfceqtl_load.res <- mr_singlesnp(tnfceqtl_load.mrdat, all_method = c("mr_ivw_fe", "mr_weighted_median", "mr_egger_regression")) 
 
 tnfceqtl_load.res %>% 
@@ -195,6 +197,13 @@ tnfceqtl_load.het <- mr_heterogeneity(tnfceqtl_load.mrdat, method_list=c("mr_egg
 tnfceqtl_load.het %>% 
   select(exposure, outcome, method, Q, Q_df, Q_pval, Q_pval) %>% 
   as_data_frame() 
+```
+
+plots
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_load.p <- mr_scatter_plot(tnfceqtl_load.mrres, tnfceqtl_load.mrdat) %>% 
+  .[[1]] + theme_bw() + theme(legend.position = 'bottom')
+tnfceqtl_load.p
 ```
 
 ### Rheumatoid Arthritis 
@@ -235,6 +244,8 @@ MR analysis
 ```{r, echo=FALSE, message=F, warning = FALSE}
 tnfceqtl_artis.res <- mr_singlesnp(tnfceqtl_artis.mrdat, all_method = c("mr_ivw_fe", "mr_weighted_median", "mr_weighted_mode","mr_egger_regression")) 
 
+tnfceqtl_artis.mrres <- mr(tnfceqtl_artis.mrdat, method_list = c("mr_ivw_fe", "mr_weighted_median", "mr_egger_regression")) 
+
 tnfceqtl_artis.res %>% 
   select(exposure, outcome, SNP, b, se, p) %>% 
   as_data_frame() 
@@ -247,6 +258,13 @@ tnfceqtl_artis.het <- mr_heterogeneity(tnfceqtl_artis.mrdat, method_list=c("mr_e
 tnfceqtl_artis.het %>% 
   select(exposure, outcome, method, Q, Q_df, Q_pval, Q_pval) %>% 
   as_data_frame() 
+```
+
+plots
+```{r, echo=FALSE, message=F, warning = FALSE}
+tnfceqtl_artis.p <- mr_scatter_plot(tnfceqtl_artis.mrres, tnfceqtl_artis.mrdat) %>% 
+  .[[1]] + theme_bw() + theme(legend.position = 'bottom')
+tnfceqtl_artis.p
 ```
 
 ## Rheumatoid Arthritis 
